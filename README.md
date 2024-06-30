@@ -20,10 +20,6 @@ MyToken is a basic ERC-20 token implemented in Solidity. It provides functionali
 
 Transfer tokens from sender's account to another address.
 
-### `approve`
-
-Allow another address to spend tokens on your behalf.
-
 ### `transfer_from`
 
 Transfer tokens from one address to another using the allowance mechanism.
@@ -36,18 +32,10 @@ Create new tokens and assign them to a specified address. Only the contract owne
 
 Destroy tokens from the sender's account.
 
-### `increase_allowance`
-
-Increase the allowance for another address to spend tokens on your behalf.
-
-### `decrease_allowance`
-
-Decrease the allowance for another address to spend tokens on your behalf.
 
 ## Events
 
 - `Transfer`: Triggered when tokens are transferred.
-- `Approval`: Triggered when an allowance is approved.
 - `Mint`: Triggered when new tokens are minted.
 - `Burn`: Triggered when tokens are burned.
 
@@ -55,6 +43,4 @@ Decrease the allowance for another address to spend tokens on your behalf.
 
 1. **Deployment**: Deploy the contract with desired token details.
 2. **Transfers**: Use `transfer` to send tokens to another address.
-3. **Allowances**: Use `approve` to approve spending and `transfer_from` to execute transfers on behalf of another address.
-4. **Token Management**: Use `mint` to create new tokens (only for the owner) and `burn` to reduce the token supply.
-5. **Allowance Management**: Adjust allowances with `increase_allowance` and `decrease_allowance`.
+3. **Token Management**: Use `mint` to create new tokens (only for the owner) and `burn` to reduce the token supply.
