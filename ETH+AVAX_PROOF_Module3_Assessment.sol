@@ -9,7 +9,6 @@ contract MyToken {
     address public contract_owner;
 
     mapping(address => uint256) public balances;
-    mapping(address => mapping(address => uint256)) public allowances;
 
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Mint(address indexed to, uint256 value);
@@ -39,20 +38,6 @@ contract MyToken {
         emit Transfer(msg.sender, _to, _value);
     }
 
-  
-    function transfer_from(address _from, address _to, uint256 _value) external {
-        require(_from != address(0), "Invalid sender address");
-        require(_to != address(0), "Invalid recipient address");
-        require(balances[_from] >= _value, "Insufficient balance");
-        require(allowances[_from][msg.sender] >= _value, "Allowance exceeded");
-
-        balances[_from] -= _value;
-        balances[_to] += _value;
-        allowances[_from][msg.sender] -= _value;
-
-        emit Transfer(_from, _to, _value);
-    }
-
     function mint(address _to, uint256 _value) external only_owner {
         require(_to != address(0), "Invalid recipient address");
         require(_value > 0, "Mint amount must be greater than zero");
@@ -72,7 +57,4 @@ contract MyToken {
 
         emit Burn(msg.sender, _value);
     }
-
-  
-
 }
