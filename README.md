@@ -39,8 +39,3 @@ Module 3 Project: Create and Mint Token
 1. Deploy the contract on an Ethereum-compatible blockchain.
 2. The deployer address will automatically become the `contract_admin`.
 
-### Minting Tokens
-- Only the `contract_admin` can call the `mint_tokens` function:
-  ```solidity
-  mint_tokens(address recipient, uint256 amount)
-
