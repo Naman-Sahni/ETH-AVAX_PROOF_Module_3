@@ -1,60 +1,33 @@
-// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
+// SPDX-License-Identifier: MIT
 
-contract MyToken {
-    string public token_name;
-    string public token_symbol;
-    uint8 public token_decimals;
-    uint256 public total_supply;
-    address public contract_owner;
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-    mapping(address => uint256) public balances;
+contract CMToken is ERC20 {
+    address public contract_admin;
 
-    event Transfer(address indexed from, address indexed to, uint256 value);
-    event Mint(address indexed to, uint256 value);
-    event Burn(address indexed from, uint256 value);
+    constructor() ERC20("MyToken", "MTK") {
+        contract_admin = msg.sender;
+        _mint(address(this), 10 * 10 ** decimals());
+    }
 
-    modifier only_owner {
-        require(msg.sender == contract_owner, "Only the contract owner can execute this function");
+    modifier only_contract_admin() {
+        require(msg.sender == contract_admin, "Caller is not the admin");
         _;
     }
 
-    constructor(string memory _name, string memory _symbol, uint8 _decimals, uint256 _initial_supply) {
-        token_name = _name;
-        token_symbol = _symbol;
-        token_decimals = _decimals;
-        total_supply = _initial_supply * 10**uint256(_decimals);
-        contract_owner = msg.sender;
-        balances[contract_owner] = total_supply;
+    function mint_tokens(address recipient, uint256 amount) public only_contract_admin {
+        uint contract_balance = balanceOf(address(this));
+        require(contract_balance >= amount, "Insufficient contract balance");
+        _transfer(address(this), recipient, amount);
     }
 
-    function transfer(address _to, uint256 _value) external {
-        require(_to != address(0), "Invalid recipient address");
-        require(balances[msg.sender] >= _value, "Insufficient balance");
-
-        balances[msg.sender] -= _value;
-        balances[_to] += _value;
-
-        emit Transfer(msg.sender, _to, _value);
+    function burn_tokens(uint256 amount) public {
+        _burn(msg.sender, amount);
     }
 
-    function mint(address _to, uint256 _value) external only_owner {
-        require(_to != address(0), "Invalid recipient address");
-        require(_value > 0, "Mint amount must be greater than zero");
-
-        total_supply += _value;
-        balances[_to] += _value;
-
-        emit Mint(_to, _value);
-    }
-
-    function burn(uint256 _value) external {
-        require(balances[msg.sender] >= _value, "Insufficient balance");
-        require(_value > 0, "Burn amount must be greater than zero");
-
-        total_supply -= _value;
-        balances[msg.sender] -= _value;
-
-        emit Burn(msg.sender, _value);
+    function transfer_tokens(address recipient, uint256 amount) public returns (bool) {
+        _transfer(msg.sender, recipient, amount);
+        return true;
     }
 }
